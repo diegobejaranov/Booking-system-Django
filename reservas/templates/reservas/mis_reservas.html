@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mis Reservas</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 2px solid #ecf0f1; padding-bottom: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #34495e; color: white; }
+        tr:hover { background-color: #f9f9f9; }
+        .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; padding: 15px; border-radius: 4px; margin-bottom: 20px; }
+        .btn-nav { background: #2ecc71; padding: 10px 15px; color: white; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block; margin-bottom: 20px; }
+        .btn-nav:hover { background: #27ae60; }
+        .btn-back { display: inline-block; margin-bottom: 20px; color: #7f8c8d; text-decoration: none; margin-right: 15px; }
+    </style>
+</head>
+<body>
+
+    <a href="{% url 'lista_recursos' %}" class="btn-back">⬅️ Ver Recursos</a>
+    <a href="{% url 'crear_reserva' %}" class="btn-nav">➕ Nueva Reserva</a>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <h1>Mi Historial de Reservas</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Recurso</th>
+                <th>Tipo</th>
+                <th>Fecha / Hora Inicio</th>
+                <th>Fecha / Hora Fin</th>
+                <th>¿Recurrente?</th>
+                <th>Solicitada el</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reserva in reservas %}
+                <tr>
+                    <td><strong>{{ reserva.resource.name }}</strong></td>
+                    <td>{{ reserva.resource.get_resource_type_display }}</td>
+                    <td>{{ reserva.start_time|date:"d/m/Y H:i" }}</td>
+                    <td>{{ reserva.end_time|date:"d/m/Y H:i" }}</td>
+                    <td>{% if reserva.is_recurring %}🔄 Sí{% else %}❌ No{% endif %}</td>
+                    <td style="color: #7f8c8d; font-size: 0.9em;">{{ reserva.created_at|date:"d/m/Y H:i" }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6" style="text-align: center; color: #7f8c8d; padding: 30px;">
+                        Aún no has realizado ninguna reserva en el sistema.
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>

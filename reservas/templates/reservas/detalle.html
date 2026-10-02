@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Disponibilidad de {{ recurso.name }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; color: #333; }
+        h1 { color: #2c3e50; margin-bottom: 5px; }
+        .badge { background: #3498db; color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.9em; display: inline-block; margin-bottom: 15px; }
+        .info-box { background: #f9f9f9; padding: 15px; border-left: 4px solid #3498db; margin-bottom: 30px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #f2f2f2; color: #2c3e50; }
+        tr:hover { background-color: #f5f5f5; }
+        .btn-back { display: inline-block; margin-bottom: 20px; color: #7f8c8d; text-decoration: none; }
+        .btn-reserve { display: inline-block; margin-top: 20px; padding: 10px 20px; background: #2ecc71; color: white; text-decoration: none; border-radius: 4px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <a href="{% url 'lista_recursos' %}" class="btn-back">⬅️ Volver al listado general</a>
+
+    <h1>{{ recurso.name }}</h1>
+    <span class="badge">{{ recurso.get_resource_type_display }}</span>
+
+    <div class="info-box">
+        <h3>Descripción del recurso:</h3>
+        <p>{{ recurso.description|default:"Este recurso no cuenta con una descripción detallada en este momento." }}</p>
+    </div>
+
+    <h2>📅 Próximas Reservas Agendadas</h2>
+    <p>Revisa los horarios ocupados antes de solicitar tu reserva:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Usuario</th>
+                <th>Fecha y Hora de Inicio</th>
+                <th>Fecha y Hora de Fin</th>
+                <th>¿Es Recurrente?</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reserva in reservas_existentes %}
+                <tr>
+                    <td>{{ reserva.user.username }}</td>
+                    <td>{{ reserva.start_time|date:"d/m/Y H:i" }}</td>
+                    <td>{{ reserva.end_time|date:"d/m/Y H:i" }}</td>
+                    <td>{% if reserva.is_recurring %}🔄 Sí{% else %}❌ No{% endif %}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4" style="text-align: center; color: #7f8c8d;">
+                        Este recurso no tiene reservas agendadas aún. ¡Está completamente libre!
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'crear_reserva' %}" class="btn-reserve">Reservar este Recurso</a>
+
+</body>
+</html>
