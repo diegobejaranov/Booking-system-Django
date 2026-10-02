@@ -25,6 +25,7 @@ django-rosetta==0.10.3
 django-thumbnails==0.8.0
 executing==2.2.0
 fonttools==4.65.0
+gunicorn==26.2.0
 idna==3.20
 ipykernel==6.29.5
 ipython==9.1.0
@@ -62,3 +63,4 @@ traitlets==5.14.3
 typing_extensions==4.16.0
 urllib3==2.8.0
 wcwidth==0.2.13
+whitenoise==6.12.0
